@@ -5,13 +5,7 @@ class RankedByUser < DomainModel
 
 
   def lookup(value)
-     [ { :name => 'Testerma',
-       :identifier => 'id1',
-       :description => 'This is atesteasfd asoufh dasfhodas' },
-       { :name => 'Item 2',
-         :identifier => 'id2',
-        :description => 'Item 2' }
-     ]
+    self.search_amazon value
   end
 
   def lookup_by_identifier(identifier)
@@ -32,4 +26,17 @@ class RankedByUser < DomainModel
     self.ranked_by_lists.create()
   end
 
+  def search_amazon(value)
+    self.amazon_product_web_service.item_search(value, 'All').collect do |item|
+      { :name => item['ItemAttributes']['Title'],
+        :link => item['ItemAttributes']['DetailPageURL'],
+        :description => item['ItemAttributes']['Title'],
+        :identifier => item['ItemAttributes']['DetailPageURL']
+      }
+    end
+  end
+  
+  def amazon_product_web_service
+    @amazon_product_web_service ||= AmazonProductWebService.new 'AKIAIWEJ7ZFJ7DGFFHMQ', 'lFdUklom35kExtQDJmU1Udl3xsGSuPznKxv7rEc6'
+  end
 end
