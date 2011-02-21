@@ -124,7 +124,7 @@ class RankedByFetch
   
   def parse_item
     { :name => self.data[:title],
-      :link => self.data[:link],
+      :link => self.link,
       :description => self.data[:description],
       :identifier => "link=#{self.link}",
       :images => {:preview => self.data[:image_url]}

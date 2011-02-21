@@ -30,7 +30,8 @@ class RankedByUser < DomainModel
     when 'ASIN'
       self.lookup_amazon identifier
     when 'link'
-      self.lookup_oembed identifier
+      data = self.lookup_oembed identifier
+      data ||= self.lookup_fetch identifier
     end
   end
 
