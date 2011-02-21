@@ -51,6 +51,6 @@ class RankedByUser < DomainModel
   end
   
   def amazon_product_web_service
-    @amazon_product_web_service ||= AmazonProductWebService.new 'AKIAIWEJ7ZFJ7DGFFHMQ', 'lFdUklom35kExtQDJmU1Udl3xsGSuPznKxv7rEc6'
+    @amazon_product_web_service ||= RankedBy::AdminController.module_options.create_amazon_product_web_service
   end
 end
