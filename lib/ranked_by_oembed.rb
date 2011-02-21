@@ -155,8 +155,8 @@ class RankedByOembed
     { :name => self.name,
       :link => self.link,
       :description => self.description,
-      :identifier => self.link,
-      :images => {:preview => self.thumbnail_url}
+      :identifier => "link=#{self.link}",
+      :images => {:thumb => self.thumbnail_url, :preview => self.image_url}
     }
   end
 end

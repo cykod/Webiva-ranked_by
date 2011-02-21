@@ -12,10 +12,9 @@ class RankedByUser < DomainModel
         []
       end
     elsif value =~ /https?:\/\//
-      oembed = RankedByOembed.new
-      oembed.link = value
-      if oembed.process_request
-        [oembed.parse_item]
+      data = self.lookup_oembed value
+      if data
+        [data] + self.search_amazon(data[:name])
       else
         []
       end
@@ -25,7 +24,13 @@ class RankedByUser < DomainModel
   end
 
   def lookup_by_identifier(identifier)
-    self.lookup_amazon identifier
+    src_type, identifier = identifier.split '='
+    case src_type
+    when 'ASIN'
+      self.lookup_amazon identifier
+    when 'link'
+      self.lookup_oembed identifier
+    end
   end
 
   def get_list(permalink)
@@ -38,6 +43,12 @@ class RankedByUser < DomainModel
 
   def create_list
     self.ranked_by_lists.create()
+  end
+
+  def lookup_oembed(link)
+    oembed = RankedByOembed.new
+    oembed.link = link
+    oembed.process_request ? oembed.parse_item : nil
   end
 
   def parse_amazon_item(item)
@@ -53,13 +64,14 @@ class RankedByUser < DomainModel
     { :name => item['ItemAttributes']['Title'],
       :link => item['DetailPageURL'],
       :description => description,
-      :identifier => item['ASIN'],
+      :identifier => "ASIN=#{item['ASIN']}",
       :images => images
     }
   end
 
   def search_amazon(value)
-    self.amazon_product_web_service.item_search(value, 'All').collect { |item| self.parse_amazon_item(item) }
+    items = self.amazon_product_web_service.item_search(value, 'All')
+    items ? items.collect { |item| self.parse_amazon_item(item) } : []
   end
   
   def lookup_amazon(value)
