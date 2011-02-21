@@ -21,12 +21,14 @@ var RankedBy = (function($) {
   this.runAutocomplete = function() {
     var search =  $("#list_add_item").val();
     if(search == lastLookup) return;
+    if(search.length <= 3) return;
     lastLookup = search;
-    $("#add_item_autocomplete").load("/website/ranked_by/user/lookup",
+    $("#add-item-autocomplete").load("/website/ranked_by/user/lookup",
                             { value: $("#list_add_item").val() },
                             function() { 
                               self.updateAddLinks();
-                              $("#add_item_autocomplete").show(); 
+
+                              $("#add-item-autocomplete").slideDown(); 
                             
                             });
   };
@@ -70,6 +72,6 @@ var RankedBy = (function($) {
 
 $(function() {
 
-
+  $("input").labelify();
   $('#list_add_item').bind("keyup",RankedBy.updateListItem).bind("change",RankedBy.updateListItem);
 });

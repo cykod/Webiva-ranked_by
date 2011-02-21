@@ -1,9 +1,12 @@
 <ul>
 <% @results.each do |result| %>
   <li>
-    <a class='add-item' href='javascript:void(0);' data-identifier="<%= h result[:identifier] %>">Add Item</a>
-    <h2><%= h result[:name] %></h2>
-    <p><%= h result[:description] %></p>
+    <% if result[:images] && result[:images][:thumb] %>
+      <%= link_to(image_tag(result[:images][:thumb]),  result[:link], :target => '_blank', :class => 'image-link') %>
+    <% end -%>
+    <h2><%= result[:name] %></h2>
+    <p><%= truncate(Util::TextFormatter.text_plain_generator(result[:description]),:length => 200) %></p>
+    <a class='add-item' href='javascript:void(0);' data-identifier="<%= h result[:identifier] %>">add</a>
   </li>
 <% end -%>
 </ul>

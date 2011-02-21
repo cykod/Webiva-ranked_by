@@ -43,11 +43,11 @@ class RankedBy::UserFeature < ParagraphFeature
 
   def add_item_tags(c,data) 
    c.define_tag('add_to_list') do |t|
-        text_field(:list,:add_item)
+        text_field(:list,:add_item, :title => 'enter an item name or url')
       end
 
       c.define_tag('autocomplete') do |t|
-        "<div id='add_item_autocomplete' style='display:none;'></div>"
+        "<div id='add-item-autocomplete' style='display:none;'></div>"
       end
 
   end
