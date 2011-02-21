@@ -4,7 +4,24 @@ class RankedByUser < DomainModel
   has_many :ranked_by_lists
 
   def lookup(value)
-    self.search_amazon value
+    if value.include?('http://www.amazon.com')
+      begin
+        uri = URI.parse value
+        [self.lookup_amazon(uri.path.split('/')[-2])]
+      rescue URI::InvalidURIError
+        []
+      end
+    elsif value =~ /https?:\/\//
+      oembed = RankedByOembed.new
+      oembed.link = value
+      if oembed.process_request
+        [oembed.parse_item]
+      else
+        []
+      end
+    else
+      self.search_amazon value
+    end
   end
 
   def lookup_by_identifier(identifier)
