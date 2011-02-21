@@ -6,7 +6,7 @@ class RankedByList < DomainModel
   validates_uniqueness_of :permalink
 
   belongs_to :ranked_by_user
-  has_many :items, :class_name => 'RankedByItem', :foreign_key => 'ranked_by_list_id'
+  has_many :items, :class_name => 'RankedByItem', :foreign_key => 'ranked_by_list_id', :order => 'ranking DESC'
 
 
   def add_item(item_data)
@@ -14,6 +14,9 @@ class RankedByList < DomainModel
                       :description => item_data[:description])
   end
 
+  def as_json(options = {})
+    self.attributes.merge(:items => self.items.as_json) 
+  end
 
   protected
 

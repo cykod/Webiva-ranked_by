@@ -3,6 +3,8 @@ var RankedBy = (function($) {
   var self = this;
   var updateTimer = null;
 
+  var lastLookup = null;
+
   this.updateListItem = function(event) {
     var val = $(this).val();
 
@@ -17,6 +19,9 @@ var RankedBy = (function($) {
   };
 
   this.runAutocomplete = function() {
+    var search =  $("#list_add_item").val();
+    if(search == lastLookup) return;
+    lastLookup = search;
     $("#add_item_autocomplete").load("/website/ranked_by/user/lookup",
                             { value: $("#list_add_item").val() },
                             function() { 
@@ -51,8 +56,12 @@ var RankedBy = (function($) {
     $.post("/website/ranked_by/user/add_item",
              { list_id: listId, identifier: identifier },
              function(data) {
-               $('#user-list').html(data);
+               $("#itemTemplate").tmpl(data).appendTo("#ranked_list")[0];
              });
+  }
+
+  this.drawItems = function() {
+
   }
 
   return this;

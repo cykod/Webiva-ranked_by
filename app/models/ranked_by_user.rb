@@ -15,9 +15,9 @@ class RankedByUser < DomainModel
   end
 
   def lookup_by_identifier(identifier)
-       { :name => 'Item 2',
+       { :name => 'Item ' + rand(100).to_s,
          :identifier => 'id2',
-        :description => 'Item 2' }
+        :description => 'Item description' + rand(100).to_s }
   end
 
   def get_list(permalink)

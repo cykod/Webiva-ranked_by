@@ -12,8 +12,16 @@ class RankedBy::UserFeature < ParagraphFeature
   end
 
   feature :ranked_by_user_manage_list, :default_feature => <<-FEATURE
+  <script id="itemTemplate" type="text/x-jquery-tmpl"> 
+    <li id='item_${id}'>
+       <h2>${name}</h2>
+       <p>${description}</p>
+    </li>
+  </script>
+
     <cms:add_to_list/>
     <cms:autocomplete/>
+    <cms:list/>
   FEATURE
 
   def ranked_by_user_manage_list_feature(data)
@@ -21,7 +29,13 @@ class RankedBy::UserFeature < ParagraphFeature
       add_item_tags(c,data)
 
       c.value_tag('list') do |t|
-        "<div id='ranked-list'></div>"
+        "<ul id='ranked_list'>" +
+          data[:list].items.map { |itm|
+          "<li id='item_#{itm.id}'>
+           <h2>#{h itm.name}</h2>
+           <p>#{h itm.description}</p>
+          </li>"
+        }.join("\n") + "</ul>"
       end
     end
   end

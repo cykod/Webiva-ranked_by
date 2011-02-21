@@ -49,9 +49,9 @@ class RankedBy::UserController < ParagraphController
 
     list = @user.get_list_by_id(params[:list_id])
 
-    list.add_item(@user.lookup_by_identifier(params[:identifier]))
+    item = list.add_item(@user.lookup_by_identifier(params[:identifier]))
 
-    render :json => list
+    render :json => item
   end
 
 end

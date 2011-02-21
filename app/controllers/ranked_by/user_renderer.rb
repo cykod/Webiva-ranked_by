@@ -35,7 +35,8 @@ class RankedBy::UserRenderer < ParagraphRenderer
 
 
   def js_includes
-    require_js('//ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js');
+    require_js('http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js');
+    require_js('http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js');
     require_js('/components/ranked_by/js/ranked_by.js');
   end
 
