@@ -87,7 +87,8 @@ $(function() {
 
   $('.edit').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
   { cssclass: 'editable',
-    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>'
+    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
+    onblur: 'submit'
   }
   );
 
