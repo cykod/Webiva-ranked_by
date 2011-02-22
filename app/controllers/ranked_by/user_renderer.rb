@@ -35,6 +35,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
       js_includes
       @editable = true
     end
+    require_js("http://www.websnapr.com/js/websnapr.js");
 
     set_title(@list.name) unless @list.name.blank?
 
@@ -51,7 +52,6 @@ class RankedBy::UserRenderer < ParagraphRenderer
     require_js('/components/ranked_by/js/jquery.jeditable.js');
     require_js('/components/ranked_by/js/ranked_by.js');
     require_js('/components/ranked_by/js/jquery.labelify.js');
-    require_js("http://www.websnapr.com/js/websnapr.js");
     
   end
 
