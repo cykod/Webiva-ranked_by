@@ -56,10 +56,12 @@ var RankedBy = (function($) {
   }
 
   this.addItem = function(listId,identifier) {
+    $("#add-item-autocomplete").slideUp(); 
     $.post("/website/ranked_by/user/add_item",
              { list_id: listId, identifier: identifier },
              function(data) {
-               $("#itemTemplate").tmpl(data).appendTo("#ranked_list")[0];
+               $(data).appendTo("#ranked_list");
+               RankedBy.refreshJavascript();
              });
   }
 
@@ -72,6 +74,50 @@ var RankedBy = (function($) {
     //alert('Saving: ' + itemId + " " + fieldType + " " + value);
   }
 
+  this.refreshJavascript = function() {
+    $("#ranked_list script").remove();
+
+    $('.edit').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
+    { cssclass: 'editable',
+    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
+    onblur: 'submit'
+    }
+    );
+
+    $('.editarea').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
+    { cssclass: 'editable',
+       type: 'textarea',
+       height: '150',
+      indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
+      submit: 'Save'
+     }
+    );
+
+    $('#ranked_list').sortable({ handle: 'h3', update: RankedBy.updateSortables });
+
+    $('a.delete').unbind('click').click(function() { 
+      if(confirm("Remove this item from the list?")) 
+      $.post('/website/ranked_by/user/remove_item',
+             { list_id: self.listId, item_id: $(this).parent().data('item-id') });
+        $(this).parent().remove();
+        RankedBy.renumberSortables();
+    });
+
+    RankedBy.renumberSortables();
+  }
+
+  this.updateSortables = function() {
+    $.post('/website/ranked_by/user/reorder?list_id=' + self.listId,
+              $("#ranked_list").sortable("serialize"));
+    renumberSortables();
+  }
+
+  this.renumberSortables = function()  {
+    $("#ranked_list li h3").each(function(idx) {
+      $(this).html("#" + (idx+1));
+    });
+  };
+
   return this;
 })(jQuery);
 
@@ -82,23 +128,6 @@ $(function() {
   $('#list_add_item').bind("keyup",RankedBy.updateListItem).bind("change",RankedBy.updateListItem);
 
 
-  var designTimer = null;
-  var unbound = true;
-
-  $('.edit').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
-  { cssclass: 'editable',
-    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
-    onblur: 'submit'
-  }
-  );
-
-  $('.editarea').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
-  { cssclass: 'editable',
-    type: 'textarea',
-    height: '150',
-    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
-    submit: 'Save'
-  }
-  );
+  RankedBy.refreshJavascript();
 
 });

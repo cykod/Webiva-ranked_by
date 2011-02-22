@@ -6,7 +6,7 @@ class RankedBy::UserController < ParagraphController
   editor_for :create_list, :name => "Create list", :feature => :ranked_by_user_create_list
   editor_for :manage_list, :name => "Manage list", :feature => :ranked_by_user_manage_list, :inputs => { :list_id => [[ :url, 'List Identifier', :path ]] }
 
-  user_actions :lookup, :create_list_add_item, :add_item, :edit 
+  user_actions :lookup, :create_list_add_item, :add_item, :edit, :remove_item, :reorder
 
   class CreateListOptions < HashModel
     # Paragraph Options
@@ -39,6 +39,7 @@ class RankedBy::UserController < ParagraphController
     @user = ranked_by_user
 
     list = @user.create_list
+    
     list.add_item(@user.lookup_by_identifier(params[:identifier]))
 
     render :json => list
@@ -51,7 +52,31 @@ class RankedBy::UserController < ParagraphController
 
     item = list.add_item(@user.lookup_by_identifier(params[:identifier]))
 
-    render :json => item
+    @generating_thumbnail = true;
+
+    render :partial => "/ranked_by/user/item",:locals => { :item => item, :index => 0, :editable => true }
+  end
+
+  def remove_item
+    @user = ranked_by_user
+
+    list = @user.get_list_by_id(params[:list_id])
+
+    list.items.delete(list.items.find_by_id(params[:item_id]))
+
+    render :nothing => true
+  end
+
+  def reorder 
+    @user = ranked_by_user
+
+    list = @user.get_list_by_id(params[:list_id])
+
+    params[:item].each_with_index do |itm_id,idx|
+      list.items.detect { |itm| itm.id == itm_id.to_i }.update_attributes(:ranking => -1 * idx)
+    end
+
+    render :nothing => true
   end
 
   def edit
