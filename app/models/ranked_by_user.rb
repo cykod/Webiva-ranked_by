@@ -64,6 +64,8 @@ class RankedByUser < DomainModel
     { :name => item['ItemAttributes']['Title'],
       :link => item['DetailPageURL'],
       :description => description,
+      :source_domain => 'amazon.com',
+      :item_type => 'amazon',
       :identifier => "ASIN=#{item['ASIN']}",
       :images => images
     }

@@ -23,12 +23,13 @@ var RankedBy = (function($) {
     if(search == lastLookup) return;
     if(search.length <= 3) return;
     lastLookup = search;
+    $("#loading-indicator").css('visibility', 'visible');
     $("#add-item-autocomplete").load("/website/ranked_by/user/lookup",
                             { value: $("#list_add_item").val() },
                             function() { 
                               self.updateAddLinks();
-
                               $("#add-item-autocomplete").slideDown(); 
+                              $("#loading-indicator").css('visibility', 'hidden');
                             
                             });
   };
@@ -66,6 +67,11 @@ var RankedBy = (function($) {
 
   }
 
+  this.queueChanges = function(itemId,fieldType,value) {
+    
+    //alert('Saving: ' + itemId + " " + fieldType + " " + value);
+  }
+
   return this;
 })(jQuery);
 
@@ -74,4 +80,24 @@ $(function() {
 
   $("input").labelify();
   $('#list_add_item').bind("keyup",RankedBy.updateListItem).bind("change",RankedBy.updateListItem);
+
+
+  var designTimer = null;
+  var unbound = true;
+
+  $('.edit').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
+  { cssclass: 'editable',
+    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>'
+  }
+  );
+
+  $('.editarea').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
+  { cssclass: 'editable',
+    type: 'textarea',
+    height: '150',
+    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
+    submit: 'Save'
+  }
+  );
+
 });

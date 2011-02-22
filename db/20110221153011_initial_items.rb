@@ -13,7 +13,7 @@ class InitialItems < ActiveRecord::Migration
       t.string :permalink
       t.string :name
       t.string :description
-      t.description
+      t.string :author
       t.integer :views, :default => 0
       t.timestamps
     end
@@ -27,9 +27,16 @@ class InitialItems < ActiveRecord::Migration
       t.integer :ranked_by_user_id
       t.integer :ranked_by_list_id
       t.string :name
+      t.boolean :custom_name, :default => false
       t.string :item_type
-      t.string :url
+      t.string :identifier
+      t.text :url
       t.text :description
+      t.boolean :custom_description, :default => false
+      t.string :small_image_url
+      t.string :large_image_url
+      t.string :source_domain
+      t.integer :image_file_id
       t.float :ranking, :default => 0
       t.timestamps
     end

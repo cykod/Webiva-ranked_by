@@ -10,8 +10,15 @@ class RankedByList < DomainModel
 
 
   def add_item(item_data)
+    item_data[:images] ||= {}
     self.items.create(:name => item_data[:name],
-                      :description => item_data[:description])
+                      :item_type => item_data[:item_type],
+                      :identifier => item_data[:identifier],
+                      :source_domain => item_data[:source_domain],
+                      :url => item_data[:link], 
+                      :small_image_url => item_data[:images][:thumb],
+                      :large_image_url => item_data[:images][:preview],
+                      :description => Util::TextFormatter.text_plain_generator(item_data[:description]).to_s[0..200])
   end
 
   def as_json(options = {})
