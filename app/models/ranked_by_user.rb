@@ -13,6 +13,7 @@ class RankedByUser < DomainModel
       end
     elsif value =~ /https?:\/\//
       data = self.lookup_oembed value
+      data ||= self.lookup_fetch value
       if data
         [data] + self.search_amazon(data[:name])
       else
@@ -29,7 +30,8 @@ class RankedByUser < DomainModel
     when 'ASIN'
       self.lookup_amazon identifier
     when 'link'
-      self.lookup_oembed identifier
+      data = self.lookup_oembed identifier
+      data ||= self.lookup_fetch identifier
     end
   end
 
@@ -47,6 +49,12 @@ class RankedByUser < DomainModel
 
   def lookup_oembed(link)
     oembed = RankedByOembed.new
+    oembed.link = link
+    oembed.process_request ? oembed.parse_item : nil
+  end
+
+  def lookup_fetch(link)
+    oembed = RankedByFetch.new
     oembed.link = link
     oembed.process_request ? oembed.parse_item : nil
   end
