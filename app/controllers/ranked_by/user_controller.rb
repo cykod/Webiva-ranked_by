@@ -54,7 +54,7 @@ class RankedBy::UserController < ParagraphController
 
     @generating_thumbnail = true;
 
-    render :partial => "/ranked_by/user/item",:locals => { :item => item, :index => 0 }
+    render :partial => "/ranked_by/user/item",:locals => { :item => item, :index => 0, :editable => true }
   end
 
   def remove_item

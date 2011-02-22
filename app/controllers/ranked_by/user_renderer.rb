@@ -10,6 +10,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
     @options = paragraph_options :create_list
 
     js_includes
+    @editable = true
   
     render_paragraph :feature => :ranked_by_user_create_list
   end
@@ -27,9 +28,16 @@ class RankedBy::UserRenderer < ParagraphRenderer
       @list = @user.get_list(list_id)
     end
 
+    if !@list
+      @list = RankedByList.find_by_permalink(list_id)
+      @editable = false
+    else
+      js_includes
+      @editable = true
+    end
+
     set_title(@list.name) unless @list.name.blank?
 
-    js_includes
     html_include(:extra_head_html,"<script>RankedBy.listId = '#{@list.id}';</script>")
 
     render_paragraph :feature => :ranked_by_user_manage_list
