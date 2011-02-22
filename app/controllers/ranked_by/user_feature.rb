@@ -45,12 +45,7 @@ class RankedBy::UserFeature < ParagraphFeature
         "<ul id='ranked_list'>" +
           data[:list].items.map { |itm|
           idx += 1;
-          "<li id='item_#{itm.id}'>
-           <h3>##{idx}</h3>
-           <a class='image_link' href='#{itm.url}' target='_blank'><img src='#{itm.large_image_url}'/></a>
-           <h2  id='item-title-#{itm.id}' class='edit'>#{h itm.name}</h2>
-           <p id='item-description-#{itm.id}' class='editarea'>#{h itm.description}</p>
-          </li>"
+          render_to_string :partial => '/ranked_by/user/item', :locals => {:item => itm, :index => idx }
         }.join("\n") + "</ul>"
       end
     end

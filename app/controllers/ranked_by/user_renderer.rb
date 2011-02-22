@@ -27,6 +27,8 @@ class RankedBy::UserRenderer < ParagraphRenderer
       @list = @user.get_list(list_id)
     end
 
+    set_title(@list.name) unless @list.name.blank?
+
     js_includes
     html_include(:extra_head_html,"<script>RankedBy.listId = '#{@list.id}';</script>")
 
@@ -37,9 +39,12 @@ class RankedBy::UserRenderer < ParagraphRenderer
   def js_includes
     require_js('http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js');
     require_js('http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js');
+    require_js('https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js');
     require_js('/components/ranked_by/js/jquery.jeditable.js');
     require_js('/components/ranked_by/js/ranked_by.js');
     require_js('/components/ranked_by/js/jquery.labelify.js');
+    require_js("http://www.websnapr.com/js/websnapr.js");
+    
   end
 
 end
