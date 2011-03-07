@@ -1,10 +1,12 @@
 <%
-list_html = "<h1>#{h list.name}</h1>"
+list_html = render :partial => '/ranked_by/page/embed_style', :locals => {:permalink => list.permalink}
+
+list_html += "<h1>#{h list.name}</h1>"
 
 idx = 0
 list_html += "<ul class='ranked_list'>" + list.items.map do |itm|
   idx += 1;
-  render :partial => '/ranked_by/user/item', :locals => {:item => itm, :index => idx, :editable => false }
+  render :partial => '/ranked_by/page/item', :locals => {:item => itm, :index => idx, :editable => false }
 end.join("\n") + "</ul>"
 
 %>
@@ -14,7 +16,7 @@ end.join("\n") + "</ul>"
   var ele = document.getElementById("ranked_by_<%= list.permalink %>");
   if(ele && ele.parentNode && ele.parentNode.replaceChild) {
     var divTag = document.createElement("div");
-    divTag.id = "ranked_by_#{list.permalink}";
+    divTag.id = "ranked_by_<%= list.permalink %>";
     divTag.innerHTML = "<%= jh list_html %>";
     ele.parentNode.replaceChild(divTag, ele);
   }
