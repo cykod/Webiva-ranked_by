@@ -45,6 +45,25 @@ class RankedBy::UserFeature < ParagraphFeature
     end
   end
 
+  feature :ranked_by_user_my_lists, :default_feature => <<-FEATURE
+  <cms:lists>
+  <ul>
+    <cms:list>
+    <li>
+      <cms:manage_link><cms:name/></cms:manage_link>
+    </li>
+    </cms:list>
+  </ul>
+  </cms:lists>
+  FEATURE
+
+  def ranked_by_user_my_lists_feature(data)
+    webiva_feature(:ranked_by_user_my_lists, data) do |c|
+      c.loop_tag('list') { |t| data[:lists] }
+      c.h_tag('list:name') { |t| t.locals.list.name }
+      c.link_tag('list:manage') { |t| data[:options].manage_list_page_node(t.locals.list.permallink) if data[:options].manage_list_page_node }
+    end
+  end
 
   def add_item_tags(c,data) 
    c.define_tag('add_to_list') do |t|

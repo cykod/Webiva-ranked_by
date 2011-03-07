@@ -5,6 +5,7 @@ class RankedBy::UserController < ParagraphController
   
   editor_for :create_list, :name => "Create list", :feature => :ranked_by_user_create_list
   editor_for :manage_list, :name => "Manage list", :feature => :ranked_by_user_manage_list, :inputs => { :list_id => [[ :url, 'List Identifier', :path ]] }
+  editor_for :my_lists, :name => "My Lists", :feature => :ranked_by_user_my_lists
 
   user_actions :lookup, :create_list_add_item, :add_item, :edit, :remove_item, :reorder
 
@@ -26,6 +27,15 @@ class RankedBy::UserController < ParagraphController
                  )
   end
 
+  class MyListsOptions < HashModel
+    attributes :manage_list_page_id => nil
+
+    validates_presence_of :manage_list_page_id
+
+    options_form(
+                 fld(:manage_list_page_id, :page_selector)
+                 )
+  end
 
   def lookup
     @user = ranked_by_user

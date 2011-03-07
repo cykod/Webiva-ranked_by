@@ -93,4 +93,8 @@ class RankedByUser < DomainModel
   def amazon_product_web_service
     @amazon_product_web_service ||= RankedBy::AdminController.module_options.create_amazon_product_web_service
   end
+  
+  def self.push_user(user)
+    RankedByUser.first(:conditions => {:end_user_id => user.id}) || RankedByUser.create(:end_user_id => user.id)
+  end
 end

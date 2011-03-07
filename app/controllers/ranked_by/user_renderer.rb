@@ -5,6 +5,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
 
   paragraph :create_list
   paragraph :manage_list
+  paragraph :my_lists
 
   def create_list
     @options = paragraph_options :create_list
@@ -44,6 +45,25 @@ class RankedBy::UserRenderer < ParagraphRenderer
     render_paragraph :feature => :ranked_by_user_manage_list
   end
 
+  def my_lists
+    return render(:nothing => true) unless myself.id
+
+    @options = paragraph_options :my_lists
+    
+    @user = RankedByUser.push_user myself
+    
+    if request.post? && params[:list]
+      if params[:delete]
+        list = @user.ranked_by_lists.find_by_permalink(params[:list][:permalink])
+        list.delete if list
+        redirect_paragraph :page
+        return
+      end
+    end
+
+    @lists = @user.ranked_by_lists.all(:order => 'created_at DESC')
+    render_paragraph :feature => :ranked_by_user_my_lists
+  end
 
   def js_includes
     require_js('http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js');
@@ -52,7 +72,5 @@ class RankedBy::UserRenderer < ParagraphRenderer
     require_js('/components/ranked_by/js/jquery.jeditable.js');
     require_js('/components/ranked_by/js/ranked_by.js');
     require_js('/components/ranked_by/js/jquery.labelify.js');
-    
   end
-
 end
