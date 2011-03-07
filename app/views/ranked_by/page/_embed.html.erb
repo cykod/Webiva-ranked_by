@@ -10,7 +10,7 @@ end.join + "</ol>"
   if(! document.getElementById || ! document.createElement) { return; }
 
   var ele = document.getElementById("ranked_by_<%= list.permalink %>");
-  if(ele) {
+  if(ele && ele.parentNode && ele.parentNode.replaceChild) {
     var divTag = document.createElement("div");
     divTag.className = "ranked_by_me_list";
     divTag.innerHTML = "<%= jh list_html %>";
