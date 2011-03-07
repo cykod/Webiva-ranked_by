@@ -53,6 +53,7 @@ class RankedBy::UserFeature < ParagraphFeature
     <cms:list>
     <li>
       <cms:manage_link><cms:name/></cms:manage_link> <cms:delete/>
+      <cms:embed_code><textarea readonly><cms:value/></textarea></cms:embed_code>
     </li>
     </cms:list>
   </ul>
@@ -100,6 +101,18 @@ class RankedBy::UserFeature < ParagraphFeature
     c.h_tag('list:description') { |t| t.locals.list.description }
     c.h_tag('list:author') { |t| t.locals.list.author }
     c.link_tag('list:manage') { |t| data[:options].manage_list_page_node.link(t.locals.list.permalink) if data[:options].manage_list_page_node }
+    c.link_tag('list:list') { |t| data[:options].list_page_node.link(t.locals.list.permalink) if data[:options].list_page_node }
+    c.link_tag('list:embed') { |t| data[:options].embed_page_node.link(t.locals.list.permalink) if data[:options].embed_page_node }
+    c.h_tag('list:embed_code') do |t|
+      if data[:options].list_page_node && data[:options].embed_page_node
+        name = t.locals.list.name
+        permalink = t.locals.list.permalink
+        list_url = data[:options].list_page_node.domain_link permalink
+        embed_url = data[:options].embed_page_node.domain_link permalink
+ 
+        "<a id=\"ranked_by_#{permalink}\" target=\"_blank\" href=\"#{list_url}\">#{name}</a>\n<script src=\"#{embed_url}\" type=\"text/javascript\"></script>"
+      end
+    end
     c.value_tag('list:views') { |t| t.locals.list.views }
     c.value_tag('list:num_items') { |t| t.locals.list.num_items }
     c.date_tag('list:created_at',DEFAULT_DATETIME_FORMAT.t) { |t| t.locals.list.created_at }
