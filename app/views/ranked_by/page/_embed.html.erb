@@ -1,1 +1,20 @@
+<%
+list_html = "<h1>#{h list.name}</h1>"
+
+list_html += "<ol>" + list.items.collect do |i|
+  "<li><a href=\"#{i.url}\" target=\"_blank\">#{i.name}</a></li>"
+end.join + "</ol>"
+
+%>
+(function(){
+  if(! document.getElementById || ! document.createElement) { return; }
+
+  var ele = document.getElementById("ranked_by_<%= list.permalink %>");
+  if(ele) {
+    var divTag = document.createElement("div");
+    divTag.className = "ranked_by_me_list";
+    divTag.innerHTML = "<%= jh list_html %>";
+    ele.parentNode.replaceChild(divTag, ele);
+  }
+})();
 
