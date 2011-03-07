@@ -1,0 +1,10 @@
+<ul>
+<% @results.each do |result| %>
+  <li>
+    <a class='add-item' href='javascript:void(0);' data-identifier="<%= h result[:identifier] %>">Add Item</a>
+    <h2><%= h result[:name] %></h2>
+    <p><%= h result[:description] %></p>
+  </li>
+<% end -%>
+</ul>
+Not finding what you're looking for? Try pasting in a URL
