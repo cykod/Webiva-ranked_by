@@ -1,0 +1,13 @@
+<% active_table_for :list_table, @active_table_output,
+                    :style => 'width:100%' do |t| %>
+<tr <%= highlight_row 'language',t.id %> >
+  <td><%= h t.name %></td>
+  <td><%= h t.description %></td>
+  <td><%= h t.author %></td>
+  <td><%= h t.ranked_by_user.end_user.name if t.ranked_by_user && t.ranked_by_user.end_user %></td>
+  <td align="center"><%= t.views %></td>
+  <td align="center"><%= t.num_items %></td>
+  <td><%= t.updated_at.strftime("%m/%d/%Y") %></td>
+  <td><%= t.created_at.strftime("%m/%d/%Y") %></td>
+</tr>
+<% end -%>

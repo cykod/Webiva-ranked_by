@@ -25,6 +25,10 @@ class RankedByList < DomainModel
     self.attributes.merge(:items => self.items.as_json) 
   end
 
+  def num_items
+    self.items.count
+  end
+
   protected
 
   def create_permalink

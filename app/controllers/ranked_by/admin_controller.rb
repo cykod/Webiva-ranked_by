@@ -17,8 +17,15 @@ class RankedBy::AdminController < ModuleController
 
   permit 'ranked_by_config'
 
+  content_model :ranked_by
+  
   public 
- 
+
+  def self.get_ranked_by_info
+    [{ :name => 'Ranked By Lists', :url => { :controller => '/ranked_by/manage', :action => 'lists' }, :permission => :ranked_by_manage }
+     ]
+  end
+
   def options
     cms_page_path ['Options','Modules'],"Ranked By Options"
     

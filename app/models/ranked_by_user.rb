@@ -1,6 +1,7 @@
 
 
 class RankedByUser < DomainModel
+  has_end_user :end_user_id
   has_many :ranked_by_lists
 
   def lookup(value)
