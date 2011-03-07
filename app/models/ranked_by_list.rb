@@ -29,6 +29,18 @@ class RankedByList < DomainModel
     self.items.count
   end
 
+  def refresh(opts={})
+    self.items.each { |i| i.refresh self.ranked_by_user }
+  end
+
+  def must_refresh
+    if (self.updated_at + 1.day) < Time.now
+      self.updated_at = Time.now
+      self.save
+      self.run_worker(:refresh)
+    end
+  end
+  
   protected
 
   def create_permalink

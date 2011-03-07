@@ -33,6 +33,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
     if !@list
       @list = RankedByList.find_by_permalink(list_id)
       @editable = false
+      @list.must_refresh if @list
     else
       js_includes
       @editable = true
