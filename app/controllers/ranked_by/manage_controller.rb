@@ -84,7 +84,7 @@ class RankedBy::ManageController < ModuleController
   
   def items
     display_item_table(false)
-    cms_page_path ['Content', 'Ranked By Lists'], 'Items'
+    cms_page_path ['Content', 'Ranked By Lists'], "#{@list.name} - Items"
   end
   
   def item
@@ -97,6 +97,6 @@ class RankedBy::ManageController < ModuleController
       return
     end
     
-    cms_page_path ['Content', 'Ranked By Lists', ['Items', {:action => 'items', :path => @list.id}]], "Edit #{@item.name}"
+    cms_page_path ['Content', 'Ranked By Lists', ["#{@list.name} - Items", {:action => 'items', :path => @list.id}]], "Edit #{@item.name}"
   end
 end
