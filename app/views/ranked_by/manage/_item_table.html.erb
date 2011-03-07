@@ -1,0 +1,19 @@
+<% active_table_for :item_table, @active_table_output,
+                    :refresh_url => url_for(:action => 'display_item_table', :path => @list.id),
+                    :style => 'width:100%',
+                    :more_actions => [['Delete', 'delete', 'Are you sure you want to delete these items?']] do |t| %>
+<tr <%= highlight_row 'item', t.id %> >
+  <td align='left' nowrap='1'><%= entry_checkbox "item", t.id %></td>
+  <td><%= t.image_file.image_tag(:thumb) if t.image_file %></td>
+  <td><%= link_to(t.name, :action => 'item', :path => [@list.id, t.id]) %></td>
+  <td><%= h t.ranking %></td>
+  <td><%= h t.description %></td>
+  <td><%= h t.item_type %></td>
+  <td><%= link_to t.identifier, t.url, :title => t.url, :target => '_blank' %></td>
+  <td><%= h t.source_domain %></td>
+  <td><%= link_to(t.small_image_name, t.small_image_url, :title => t.small_image_url, :target => '_blank') if t.small_image_url %></td>
+  <td><%= link_to(t.large_image_name, t.large_image_url, :title => t.large_image_url, :target => '_blank') if t.large_image_url %></td>
+  <td><%= t.updated_at.strftime("%m/%d/%Y") %></td>
+  <td><%= t.created_at.strftime("%m/%d/%Y") %></td>
+</tr>
+<% end -%>

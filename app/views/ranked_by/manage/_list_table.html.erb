@@ -1,9 +1,15 @@
 <% active_table_for :list_table, @active_table_output,
-                    :style => 'width:100%' do |t| %>
-<tr <%= highlight_row 'language',t.id %> >
-  <td><%= h t.name %></td>
+                    :style => 'width:100%',
+                    :more_actions => [['Delete', 'delete', 'Are you sure you want to delete these lists?']] do |t| %>
+<tr <%= highlight_row 'list', t.id %> >
+  <td align='left' nowrap='1'><%= entry_checkbox "list", t.id %></td>
+  <td>
+    <%= link_to(theme_image_tag('icons/actions/edit.gif'), :action => 'list', :path => t.id) %>
+    <%= link_to(t.name, :action => 'items', :path => t.id) %>
+  </td>
   <td><%= h t.description %></td>
   <td><%= h t.author %></td>
+  <td><%= h t.permalink %></td>
   <td><%= h t.ranked_by_user.end_user.name if t.ranked_by_user && t.ranked_by_user.end_user %></td>
   <td align="center"><%= t.views %></td>
   <td align="center"><%= t.num_items %></td>
