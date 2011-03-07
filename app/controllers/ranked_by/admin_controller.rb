@@ -19,6 +19,10 @@ class RankedBy::AdminController < ModuleController
 
   content_model :ranked_by
   
+  module_for :embed, 'Embed Ranked By List', :description => 'Generates embed code for Ranked By Lists'
+  
+  layout false
+  
   public 
 
   def self.get_ranked_by_info
@@ -64,4 +68,20 @@ class RankedBy::AdminController < ModuleController
     end
   end
 
+  def embed
+    @node = SiteNode.find_by_id_and_module_name(params[:path][0],'/ranked_by/embed') unless @node
+
+    @page_modifier = @node.page_modifier
+
+    @options = EmbedOptions.new(params[:options] || @page_modifier.modifier_data || {})
+    
+    if request.post? && params[:options] && @options.valid?
+      @page_modifier.update_attribute(:modifier_data, @options.to_h)
+      expire_site
+      flash.now[:notice] = 'Updated Options'
+     end
+  end
+
+  class EmbedOptions < HashModel
+  end
 end
