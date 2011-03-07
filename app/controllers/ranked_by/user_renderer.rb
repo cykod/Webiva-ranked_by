@@ -18,6 +18,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
 
   def manage_list
     @options = paragraph_options :manage_list
+    @options.manage_list_page_id = site_node.id
 
     @user = ranked_by_user
 
@@ -46,11 +47,9 @@ class RankedBy::UserRenderer < ParagraphRenderer
   end
 
   def my_lists
-    return render(:nothing => true) unless myself.id
-
     @options = paragraph_options :my_lists
-    
-    @user = RankedByUser.push_user myself
+
+    @user = ranked_by_user
     
     if request.post? && params[:list]
       if params[:delete]

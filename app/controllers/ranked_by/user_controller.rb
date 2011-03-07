@@ -10,18 +10,16 @@ class RankedBy::UserController < ParagraphController
   user_actions :lookup, :create_list_add_item, :add_item, :edit, :remove_item, :reorder
 
   class CreateListOptions < HashModel
-    # Paragraph Options
-    # attributes :success_page_id => nil
-
     options_form(
                  # fld(:success_page_id, :page_selector) # <attribute>, <form element>, <options>
                  )
   end
 
   class ManageListOptions < HashModel
-    # Paragraph Options
-    # attributes :success_page_id => nil
+    attributes :manage_list_page_id => nil
 
+    page_options :manage_list_page_id
+    
     options_form(
                  # fld(:success_page_id, :page_selector) # <attribute>, <form element>, <options>
                  )
@@ -29,6 +27,8 @@ class RankedBy::UserController < ParagraphController
 
   class MyListsOptions < HashModel
     attributes :manage_list_page_id => nil
+
+    page_options :manage_list_page_id
 
     validates_presence_of :manage_list_page_id
 
