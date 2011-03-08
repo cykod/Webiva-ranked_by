@@ -1,5 +1,4 @@
 
-
 class RankedByList < DomainModel
 
   before_create :create_permalink
@@ -9,16 +8,8 @@ class RankedByList < DomainModel
   has_many :items, :class_name => 'RankedByItem', :foreign_key => 'ranked_by_list_id', :order => 'ranking DESC'
 
 
-  def add_item(item_data)
-    item_data[:images] ||= {}
-    self.items.create(:name => item_data[:name],
-                      :item_type => item_data[:item_type],
-                      :identifier => item_data[:identifier],
-                      :source_domain => item_data[:source_domain],
-                      :url => item_data[:link], 
-                      :small_image_url => item_data[:images][:thumb],
-                      :large_image_url => item_data[:images][:preview],
-                      :description => Util::TextFormatter.text_plain_generator(item_data[:description]).to_s[0..200])
+  def add_item(data)
+    self.items.create RankedByItem.item_data(data)
   end
 
   def as_json(options = {})
@@ -41,6 +32,10 @@ class RankedByList < DomainModel
     end
   end
   
+  def increment_views
+    self.connection.execute("UPDATE ranked_by_lists SET views = views + 1 WHERE id = #{self.id}")
+    self.views += 1
+  end
   protected
 
   def create_permalink

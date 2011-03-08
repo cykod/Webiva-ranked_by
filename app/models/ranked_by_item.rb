@@ -1,5 +1,4 @@
 
-
 class RankedByItem < DomainModel
   belongs_to :ranked_by_list
 
@@ -13,18 +12,33 @@ class RankedByItem < DomainModel
     self.large_image_url.split('/')[-1] if self.large_image_url
   end
   
+  def self.item_data(data)
+    data[:images] ||= {}
+
+    { :name => data[:name],
+      :item_type => data[:item_type],
+      :identifier => data[:identifier],
+      :source_domain => data[:source_domain],
+      :url => data[:link], 
+      :small_image_url => data[:images][:thumb],
+      :large_image_url => data[:images][:preview],
+      :description => Util::TextFormatter.text_plain_generator(data[:description]).to_s.gsub(/  +/, ' ').strip[0..200]
+    }
+  end
+
   def refresh(user)
     return unless self.item_type == 'amazon'
     data = nil
     begin
-      data = user.lookup_amazon self.identifier.split('=')[-1]
+      data = RankedByItem.item_data(user.lookup_amazon(self.identifier.split('=')[-1]))
     rescue RESTHome::InvalidResponse
     end
     return unless data
     self.name = data[:name] unless self.custom_name
     self.description = data[:description] unless self.custom_description
-    self.small_image_url = data[:images][:thumb]
-    self.large_image_url = data[:images][:full]
+    self.url = data[:url]
+    self.small_image_url = data[:small_image_url]
+    self.large_image_url = data[:large_image_url]
     self.save
   end
 end

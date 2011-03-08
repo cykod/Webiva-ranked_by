@@ -29,4 +29,11 @@ module RankedByHelper
 
     @ranked_by_user
   end
+
+  def increment_list_views(list)
+    session[:ranked_by_lists] ||= {}
+    return if session[:ranked_by_lists].has_key?(list.id)
+    list.increment_views
+    session[:ranked_by_lists][list.id] = true
+  end
 end
