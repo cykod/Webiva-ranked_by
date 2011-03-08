@@ -15,9 +15,14 @@ class RankedBy::PageRenderer < ParagraphRenderer
   
   def most_popular
     @options = paragraph_options :most_popular
-    limit = (@options.limit || 10).to_i
-    @most_viewed = RankedByList.all :conditions => 'name IS NOT NULL && name != ""', :order => 'views DESC', :limit => limit
-    @most_recent = RankedByList.all :conditions => ['name IS NOT NULL && name != "" && created_at < ?', 20.minutes.ago], :order => 'created_at DESC', :limit => limit
-    render_paragraph :feature => :ranked_by_page_most_popular
+    
+    result = renderer_cache(nil, nil, :expires => @options.expires*60) do |cache|
+      limit = @options.limit
+      @most_viewed = RankedByList.all :conditions => 'name IS NOT NULL && name != ""', :order => 'views DESC', :limit => limit
+      @most_recent = RankedByList.all :conditions => ['name IS NOT NULL && name != "" && created_at < ?', @options.created_ago.minutes.ago], :order => 'created_at DESC', :limit => limit
+      cache[:output] = ranked_by_page_most_popular_feature
+    end
+
+    render_paragraph :text => result.output
   end
 end

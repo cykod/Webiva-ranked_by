@@ -8,9 +8,7 @@ class RankedBy::PageFeature < ParagraphFeature
   <ul>
     <cms:list>
     <li>
-      <h3># <cms:index/></h3>
-      <h2><cms:list_link><cms:name/></cms:list_link></h2>
-      <br/>
+      <cms:list_link><cms:name/></cms:list_link>
    </li>
    </cms:list>
   </ul>
@@ -22,9 +20,7 @@ class RankedBy::PageFeature < ParagraphFeature
   <ul>
     <cms:list>
     <li>
-      <h3># <cms:index/></h3>
-      <h2><cms:list_link><cms:name/></cms:list_link></h2>
-      <br/>
+      <cms:list_link><cms:name/></cms:list_link>
    </li>
    </cms:list>
   </ul>
