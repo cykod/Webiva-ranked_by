@@ -1,5 +1,8 @@
-
+<%
+additem ||= false
+-%>
 <li data-item-id='<%= item.id%>' id='item_<%= item.id%>'>
+<a name='item_scroll_<%= item.id%>' id='item_scroll_<%= item.id%>'></a>
   <h3># <%= index %></h3>
   <% if item.large_image_url %>
   <a class='image_link' href='<%= item.url%>' target='_blank'><img src='<%= item.large_image_url%>'/></a>
@@ -14,4 +17,13 @@
   <% if editable %>
   <a class='delete' href='javascript:void(0);'>remove</a>
 <% end -%>
+
+<% if additem -%>
+<script>
+jQuery(function() {
+$.scrollTo('#item_scroll_<%= item.id%>', 800, {axis: 'y'});
+});
+</script>
+<% end -%>
 </li>
+

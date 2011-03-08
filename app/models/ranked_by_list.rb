@@ -36,6 +36,18 @@ class RankedByList < DomainModel
     self.connection.execute("UPDATE ranked_by_lists SET views = views + 1 WHERE id = #{self.id}")
     self.views += 1
   end
+  
+  def generate_permalink
+    cnt = 1
+    base_path = SiteNode.generate_node_path "#{self.author}-#{self.name}"
+    test_path = base_path
+    while RankedByList.first(:conditions => ['permalink = ? && id != ?', test_path, self.id])
+      cnt += 1
+      test_path = "#{base_path}-#{cnt}"
+    end
+    self.permalink = test_path
+  end
+
   protected
 
   def create_permalink

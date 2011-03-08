@@ -16,6 +16,7 @@ class RankedBy::UserFeature < ParagraphFeature
   feature :ranked_by_user_manage_list, :default_feature => <<-FEATURE
     <cms:title/>
     <cms:author/>
+    <cms:update_url/>
 
     <cms:add_to_list/>
     <cms:autocomplete/>
@@ -33,6 +34,17 @@ class RankedBy::UserFeature < ParagraphFeature
 
       c.define_tag('author') do |t|
         "<h2 #{"class='edit'" if data[:editable]} id='list-author'>#{h(data[:list].author || "[Author Name Here]") }</h2>"
+      end
+
+      c.define_tag('update_url') do |t|
+        if data[:editable]
+        label = t.attr['label'] || 'Update Url'
+        form_tag("") +
+          tag(:input, :type => 'hidden', :name => 'list[permalink]',:value => data[:list].permalink) + 
+          tag(:input, :type => 'hidden', :name => 'permalink', :value => '1') + 
+          tag(:input, :type => 'submit', :value => label, :class => t.attr['class'], :id => t.attr['id'], :style => t.attr['style']) +
+          "</form>"
+        end
       end
 
       c.value_tag('list') do |t|
