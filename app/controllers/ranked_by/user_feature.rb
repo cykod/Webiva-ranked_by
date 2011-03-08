@@ -39,11 +39,13 @@ class RankedBy::UserFeature < ParagraphFeature
       c.define_tag('update_url') do |t|
         if data[:editable]
         label = t.attr['label'] || 'Update Url'
-        form_tag("") +
-          tag(:input, :type => 'hidden', :name => 'list[permalink]',:value => data[:list].permalink) + 
-          tag(:input, :type => 'hidden', :name => 'permalink', :value => '1') + 
-          tag(:input, :type => 'submit', :value => label, :class => t.attr['class'], :id => t.attr['id'], :style => t.attr['style']) +
-          "</form>"
+          "<div id='list-update-url' style='display:none;'>" +
+            form_tag("") +
+            tag(:input, :type => 'hidden', :name => 'list[permalink]',:value => data[:list].permalink) + 
+            tag(:input, :type => 'hidden', :name => 'permalink', :value => '1') + 
+            tag(:input, :type => 'submit', :value => label, :class => t.attr['class'], :id => t.attr['id'], :style => t.attr['style']) +
+            "</form>" +
+            "</div>"
         end
       end
 

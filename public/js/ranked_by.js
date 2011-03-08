@@ -8,10 +8,12 @@ var RankedBy = (function($) {
   this.updateListItem = function(event) {
     var val = $(this).val();
 
-    if(val.length > 3) {
+    if(event.keyCode == 13) {
+      self.runAutocomplete();
+    } else if(val.length > 3) {
       self.setAutocompleteTimer();
     }
-  }
+  };
 
   this.setAutocompleteTimer = function() {
     if(updateTimer) clearTimeout(updateTimer);
@@ -19,21 +21,29 @@ var RankedBy = (function($) {
   };
 
   this.runAutocomplete = function() {
+    if(updateTimer) clearTimeout(updateTimer);
+    updateTimer = null;
     var search =  $("#list_add_item").val();
-    if(search == lastLookup) return;
+    if(search == lastLookup) {
+      self.showResults();
+      return;
+    }
     if(search.length <= 3) return;
     lastLookup = search;
     $("#loading-indicator").css('visibility', 'visible');
     $("#add-item-autocomplete").load("/website/ranked_by/user/lookup",
                             { value: $("#list_add_item").val() },
-                            function() { 
-                              self.updateAddLinks();
-                              $("#add-item-autocomplete").slideDown(); 
-                              $("#loading-indicator").css('visibility', 'hidden');
-                            
+                            function() {
+			      self.showResults();
                             });
   };
 
+  this.showResults = function() {
+    self.updateAddLinks();
+    $("#add-item-autocomplete").slideDown();
+    $('html, body').animate({scrollTop:0}, 10);
+    $("#loading-indicator").css('visibility', 'hidden');
+  };
 
   this.updateAddLinks = function() {
     $(".add-item").click(function() {
@@ -79,17 +89,19 @@ var RankedBy = (function($) {
 
     $('.edit').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
     { cssclass: 'editable',
-    indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
-    onblur: 'submit'
+      indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
+      onblur: 'submit',
+      callback: function(v, s) { self.showUpdateUrl(); }
     }
     );
 
     $('.editarea').editable('/website/ranked_by/user/edit?list_id=' + RankedBy.listId,
     { cssclass: 'editable',
-       type: 'textarea',
-       height: '150',
+      type: 'textarea',
+      height: '150',
       indicator: '<img src="/components/ranked_by/images/indicator.gif"/>',
-      submit: 'Save'
+      submit: 'Save',
+      callback: function(v, s) { self.showUpdateUrl(); }
      }
     );
 
@@ -116,6 +128,14 @@ var RankedBy = (function($) {
     $("#ranked_list li h3").each(function(idx) {
       $(this).html("#" + (idx+1));
     });
+  };
+
+  this.showUpdateUrl = function() {
+    var title = $('#list-title').text();
+    var author = $('#list-author').text();
+    if(title != '' && title != '[Enter a list title]' && author != '' && author != '[Author Name Here]') {
+      $('#list-update-url').show();
+    }
   };
 
   return this;
