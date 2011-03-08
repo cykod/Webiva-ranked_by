@@ -34,12 +34,12 @@ var RankedBy = (function($) {
     $("#add-item-autocomplete").load("/website/ranked_by/user/lookup",
                             { value: $("#list_add_item").val() },
                             function() {
+			      self.updateAddLinks();
 			      self.showResults();
                             });
   };
 
   this.showResults = function() {
-    self.updateAddLinks();
     $("#add-item-autocomplete").slideDown();
     $('html, body').animate({scrollTop:0}, 10);
     $("#loading-indicator").css('visibility', 'hidden');
