@@ -51,20 +51,32 @@ class RankedBy::AdminController < ModuleController
   class Options < HashModel
    # Options attributes 
    # attributes :attribute_name => value
-    attributes :amazon_access_key => nil, :amazon_secret => nil, :amazon_associate_tag => nil
+    attributes :amazon_access_key => nil, :amazon_secret => nil, :amazon_associate_tag => nil, :webthumb_bluga_api_key => nil, :notify_url => nil
 
     validates_presence_of :amazon_access_key, :amazon_secret
 
     options_form(
                  fld(:amazon_access_key, :text_field, :required => true),
                  fld(:amazon_secret, :text_field, :required => true),
-                 fld(:amazon_associate_tag, :text_field)
+                 fld(:amazon_associate_tag, :text_field),
+                 fld(:webthumb_bluga_api_key, :text_field),
+                 fld(:notify_url, :text_field)
                  )
     
     def create_amazon_product_web_service
       service = AmazonProductWebService.new self.amazon_access_key, self.amazon_secret
       service.associate_tag = self.amazon_associate_tag unless self.amazon_associate_tag.blank?
       service
+    end
+    
+    def create_webthumb_bluga_web_service
+      service = WebthumbBlugaWebService.new self.webthumb_bluga_api_key
+      service.notify_url = self.notify_url.blank? ? self.default_notify_url : self.notify_url
+      service
+    end
+    
+    def default_notify_url
+      Configuration.domain_link '/website/ranked_by/thumbnail/notify'
     end
   end
 
