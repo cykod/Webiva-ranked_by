@@ -82,4 +82,9 @@ class RankedByItem < DomainModel
   def large_image_url
     self.image_file ? self.image_file.full_url : self[:large_image_url]
   end
+  
+  def as_json(options={})
+    data = self.attributes.slice('id', 'name', 'item_type', 'identifier', 'url', 'description', 'small_image_url', 'large_image_url', 'ranking')
+    options[:no_wrap] ? data : {:item => data}
+  end
 end

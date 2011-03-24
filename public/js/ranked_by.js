@@ -61,7 +61,7 @@ var RankedBy = (function($) {
     $.post("/website/ranked_by/user/create_list_add_item",
              { identifier: identifier },
              function(data) {
-               document.location = "/list/" +  data['permalink'];
+               document.location = "/list/" +  data['list']['permalink'];
              });
   }
 

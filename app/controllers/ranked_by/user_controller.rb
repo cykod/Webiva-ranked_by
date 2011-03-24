@@ -7,7 +7,7 @@ class RankedBy::UserController < ParagraphController
   editor_for :manage_list, :name => "Manage list", :feature => :ranked_by_user_manage_list, :inputs => { :list_id => [[ :url, 'List Identifier', :path ]] }
   editor_for :my_lists, :name => "My Lists", :feature => :ranked_by_user_my_lists
 
-  user_actions :lookup, :create_list_add_item, :add_item, :edit, :remove_item, :reorder
+  user_actions :lookup, :create_list_add_item, :add_item, :edit, :remove_item, :reorder, :list, :item
 
   class CreateListOptions < HashModel
     options_form(
@@ -111,4 +111,17 @@ class RankedBy::UserController < ParagraphController
     render :text => params[:value]
   end
 
+  def list
+    list = RankedByList.find_by_permalink(params[:path][0])
+    return render :nothing => true unless list
+    render :json => list
+  end
+
+  def item
+    list = RankedByList.find_by_permalink(params[:path][0])
+    return render :nothing => true unless list
+    item = list.items.find_by_id params[:path][1]
+    return render :nothing => true unless item
+    render :json => item
+  end
 end

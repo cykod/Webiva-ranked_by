@@ -13,7 +13,7 @@ class RankedByList < DomainModel
   end
 
   def as_json(options = {})
-    self.attributes.merge(:items => self.items.as_json) 
+    {:list => self.attributes.slice('permalink', 'name', 'description', 'author').merge(:items => self.items.collect{ |i| i.as_json(options.merge(:no_wrap => true))})}
   end
 
   def num_items
