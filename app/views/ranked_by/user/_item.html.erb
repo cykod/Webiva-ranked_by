@@ -6,7 +6,7 @@ additem ||= false
   <h3># <%= index %></h3>
   <% if item.large_image_url %>
   <a class='image_link' href='<%= item.url%>' target='_blank'><img src='<%= item.large_image_url%>'/></a>
-<% elsif @generating_thumbnail-%>
+  <% else -%>
   <a class='image_link' href='<%= item.url%>' target='_blank'><img src='/components/ranked_by/images/loading.gif'/></a>
   <% end -%>
   <h2  id='item-title-<%= item.id%>' <%= "class='edit'" if editable %>><%= h item.name%></h2>

@@ -14,6 +14,8 @@ module RankedByHelper
           end
           @ranked_by_user.destroy
           @ranked_by_user= @existing_ranked_by_user
+          session[:ranked_by_user_id] = @ranked_by_user.id
+
         else
           @ranked_by_user.update_attributes(:end_user_id => myself.id)
         end
