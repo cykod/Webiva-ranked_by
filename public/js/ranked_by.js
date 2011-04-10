@@ -105,7 +105,8 @@ var RankedBy = (function($) {
   };
 
   this.updateQueueItems = function(items) {
-    $.each(items, function(item) {
+    $.each(items, function() {
+      var item = this;
       if(queueItems[item.id] && item.large_image_url) {
         $("#item_" + item.id).find("img").attr('src',item.large_image_url);
         delete queueItems[item.id];
