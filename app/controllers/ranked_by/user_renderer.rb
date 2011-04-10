@@ -53,7 +53,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
 
     set_title(@list.name) unless @list.name.blank?
 
-    html_include(:extra_head_html,"<script>RankedBy.listId = '#{@list.id}';</script>")
+    html_include(:extra_head_html,"<script>RankedBy.listId = '#{@list.id}';RankedBy.permalink = '#{@list.permalink}';</script>")
 
     render_paragraph :feature => :ranked_by_user_manage_list
   end

@@ -5,6 +5,10 @@ var RankedBy = (function($) {
 
   var lastLookup = null;
 
+
+  var queueCnt = 0;
+  var queueItems = {};
+
   this.updateListItem = function(event) {
     var val = $(this).val();
 
@@ -17,7 +21,7 @@ var RankedBy = (function($) {
 
   this.setAutocompleteTimer = function() {
     if(updateTimer) clearTimeout(updateTimer);
-    updateTimer = setTimeout(self.runAutocomplete,600);
+    updateTimer = setTimeout(self.runAutocomplete,1500);
   };
 
   this.runAutocomplete = function() {
@@ -70,13 +74,44 @@ var RankedBy = (function($) {
     $.post("/website/ranked_by/user/add_item",
              { list_id: listId, identifier: identifier },
              function(data) {
-               $(data).appendTo("#ranked_list");
+               var item = $(data).appendTo("#ranked_list");
                RankedBy.refreshJavascript();
+               RankedBy.queueImage($(item).attr('data-item-id'));
              });
   }
 
   this.drawItems = function() {
 
+  }
+
+  this.queueImage = function(item_id) {
+    queueCnt++;
+    queueItems[item_id] = true
+  }
+
+  this.updateQueue = function() {
+    if(queueCnt > 0) {
+      $.ajax("/website/ranked_by/user/list/" + self.permalink,
+              { success:  function(data) { 
+                self.updateQueueItems(data.list.items);
+                setTimeout(self.updateQueue,5000);
+              }
+            
+            });
+
+      } else {
+        setTimeout(self.updateQueue,5000);
+      }
+  };
+
+  this.updateQueueItems = function(items) {
+    $.each(items, function(item) {
+      if(queueItems[item.id] && item.large_image_url) {
+        $("#item_" + item.id).find("img").attr('src',item.large_image_url);
+        delete queueItems[item.id];
+        queueCnt--;
+      }
+    });
   }
 
   this.queueChanges = function(itemId,fieldType,value) {
@@ -149,5 +184,6 @@ $(function() {
 
 
   RankedBy.refreshJavascript();
+  RankedBy.updateQueue();
 
 });

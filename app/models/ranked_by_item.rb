@@ -84,7 +84,9 @@ class RankedByItem < DomainModel
   end
   
   def as_json(options={})
-    data = self.attributes.slice('id', 'name', 'item_type', 'identifier', 'url', 'description', 'small_image_url', 'large_image_url', 'ranking')
+    data = self.attributes.slice('id', 'name', 'item_type', 'identifier', 'url', 'description','ranking')
+    data['large_image_url'] = self.large_image_url
+    data['small_image_url'] = self.small_image_url
     options[:no_wrap] ? data : {:item => data}
   end
 end

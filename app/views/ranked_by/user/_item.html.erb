@@ -8,9 +8,6 @@ additem ||= false
   <a class='image_link' href='<%= item.url%>' target='_blank'><img src='<%= item.large_image_url%>'/></a>
 <% elsif @generating_thumbnail-%>
   <a class='image_link' href='<%= item.url%>' target='_blank'><img src='/components/ranked_by/images/loading.gif'/></a>
-
-<% else %>
- <script type="text/javascript">wsr_snapshot('<%= item.url %>', 'waW28gBnSt0K', 's');</script>
   <% end -%>
   <h2  id='item-title-<%= item.id%>' <%= "class='edit'" if editable %>><%= h item.name%></h2>
   <p id='item-description-<%= item.id%>' <%= "class='editarea'" if editable %>><%= h item.description%></p>
