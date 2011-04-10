@@ -51,8 +51,6 @@ class RankedBy::UserRenderer < ParagraphRenderer
       end
     end
 
-    require_js("http://www.websnapr.com/js/websnapr.js");
-
     set_title(@list.name) unless @list.name.blank?
 
     html_include(:extra_head_html,"<script>RankedBy.listId = '#{@list.id}';</script>")

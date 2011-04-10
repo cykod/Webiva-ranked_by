@@ -7,7 +7,7 @@ additem ||= false
   <% if item.large_image_url %>
   <a class='image_link' href='<%= item.url%>' target='_blank'><img src='<%= item.large_image_url%>'/></a>
 <% elsif @generating_thumbnail-%>
-  <a class='image_link' href='<%= item.url%>' target='_blank'><img src='/components/ranked_by/images/snapr.jpg'/></a>
+  <a class='image_link' href='<%= item.url%>' target='_blank'><img src='/components/ranked_by/images/loading.gif'/></a>
 
 <% else %>
  <script type="text/javascript">wsr_snapshot('<%= item.url %>', 'waW28gBnSt0K', 's');</script>

@@ -36,6 +36,8 @@ class RankedBy::UserFeature < ParagraphFeature
         "<h2 #{"class='edit'" if data[:editable]} id='list-author'>#{h(data[:list].author || "[Author Name Here]") }</h2>"
       end
 
+      c.expansion_tag('list') { |t| t.locals.list = data[:list] }
+
       c.define_tag('update_url') do |t|
         if data[:editable]
         label = t.attr['label'] || 'Update Url'
@@ -49,7 +51,9 @@ class RankedBy::UserFeature < ParagraphFeature
         end
       end
 
-      c.value_tag('list') do |t|
+      self.add_list_tags c, data
+
+      c.value_tag('listhtml') do |t|
         idx = 0;
         
         "<ul id='ranked_list'>" +

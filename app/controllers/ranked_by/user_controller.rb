@@ -16,11 +16,14 @@ class RankedBy::UserController < ParagraphController
   end
 
   class ManageListOptions < HashModel
-    attributes :manage_list_page_id => nil
+    attributes :manage_list_page_id => nil, :embed_page_id => nil
 
-    page_options :manage_list_page_id
+
+    page_options :manage_list_page_id, :embed_page_id
     
     options_form(
+                 fld(:embed_page_id, :page_selector),
+                 fld(:manage_list_page_id, :page_selector)
                  # fld(:success_page_id, :page_selector) # <attribute>, <form element>, <options>
                  )
   end
