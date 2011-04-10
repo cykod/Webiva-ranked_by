@@ -32,6 +32,7 @@ class RankedBy::UserRenderer < ParagraphRenderer
 
     if !@list
       @list = RankedByList.find_by_permalink(list_id)
+      require_js('http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js');
       @editable = false
       if @list
         increment_list_views @list
